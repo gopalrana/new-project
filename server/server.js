@@ -27,6 +27,17 @@ app.get('/companies', async (req, res) => {
   }
 });
 
+
+// Render HTML page with company list
+app.get('/new-companies', async (req, res) => {
+  try {
+    const companies = await Company.find();
+    res.render('companyList', { companies });
+  } catch (err) {
+    res.status(500).send('Error fetching companies');
+  }
+});
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
