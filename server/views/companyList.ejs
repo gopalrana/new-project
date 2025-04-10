@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Company List</title>
+  <style>
+    table {
+      width: 80%;
+      margin: auto;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    img {
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;">Company List</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Company Name</th>
+        <th>PAN</th>
+        <th>GST</th>
+        <th>Logo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% companies.forEach(company => { %>
+        <tr>
+          <td><%= company.companyName %></td>
+          <td><%= company.panNumber %></td>
+          <td><%= company.gstNumber %></td>
+          <td>
+            <% if (company.logo) { %>
+              <img src="/uploads/<%= company.logo %>" alt="Logo">
+            <% } else { %>
+              No Logo
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>
