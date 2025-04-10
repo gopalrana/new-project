@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Companies</title>
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 8px;
+    }
+    button {
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Company List</h2>
+  <table id="companyTable">
+    <thead>
+      <tr>
+        <th>Company Name</th>
+        <th>PAN</th>
+        <th>GST</th>
+        <th>Logo</th>
+      </tr>
+    </thead>
+    <tbody id="companyBody"></tbody>
+  </table>
+
+  <div id="pagination"></div>
+
+  <script>
+    let currentPage = 1;
+
+    function fetchCompanies(page = 1) {
+      fetch(`http://localhost:4000/api/comp?page=${page}`)
+        .then(res => res.json())
+        .then(data => {
+          currentPage = data.currentPage;
+          const tbody = document.getElementById('companyBody');
+          tbody.innerHTML = '';
+
+          data.companies.forEach(company => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${company.companyName}</td>
+              <td>${company.panNumber}</td>
+              <td>${company.gstNumber}</td>
+              <td>${company.logo ? `<img src="/uploads/${company.logo}" width="80">` : 'No Logo'}</td>
+            `;
+            tbody.appendChild(row);
+          });
+
+          // Pagination Buttons
+          const pagination = document.getElementById('pagination');
+          pagination.innerHTML = '';
+          for (let i = 1; i <= data.totalPages; i++) {
+            const btn = document.createElement('button');
+            btn.innerText = i;
+            btn.onclick = () => fetchCompanies(i);
+            if (i === currentPage) btn.disabled = true;
+            pagination.appendChild(btn);
+          }
+        });
+    }
+
+    // Initial fetch
+    fetchCompanies();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Loan List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background: #f4f4f4;
+    }
+    h2 {
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Loan Applications</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Amount</th>
+        <th>Term (Months)</th>
+        <th>Interest Rate (%)</th>
+        <th>EMI</th>
+        <th>Status</th>
+        <th>Applied On</th>
+      </tr>
+    </thead>
+    <tbody id="loanTableBody">
+      <!-- Loan rows will be inserted here -->
+    </tbody>
+  </table>
+
+  <script>
+    fetch('http://localhost:3000/loans')
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById('loanTableBody');
+        data.loans.forEach(loan => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>₹${loan.amount}</td>
+            <td>${loan.termMonths}</td>
+            <td>${loan.interestRate}</td>
+            <td>₹${loan.emi}</td>
+            <td>${loan.status}</td>
+            <td>${new Date(loan.createdAt).toLocaleString()}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      })
+      .catch(err => {
+        console.error('Error fetching loans:', err);
+        document.getElementById('loanTableBody').innerHTML = '<tr><td colspan="6">Failed to load data</td></tr>';
+      });
+  </script>
+
+</body>
+</html>
